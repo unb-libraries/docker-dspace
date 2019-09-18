@@ -18,7 +18,7 @@ This image offers little benefit on its own, and shines when serving as the base
 
 |                    Tag                    | Dspace | JRE   | Tomcat   | Size                                                                                                                                                                                               | Status                                                                                                                                                    |
 |:-----------------------------------------:|--------|-------|-------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
-| unblibraries/dspace:6.x |   6.x  | 8 | 8 | [![](https://images.microbadger.com/badges/image/unblibraries/dspace:6.x.svg)](http://microbadger.com/images/unblibraries/dspace:6.x "Get your own image badge on microbadger.com") | [![Build Status](https://travis-ci.org/unb-libraries/docker-dspace.svg?branch=6.x)](https://travis-ci.org/unb-libraries/docker-dspace) |
+| unblibraries/dspace:6.x |   6.x  | 8 | 8 | [![](https://images.microbadger.com/badges/image/unblibraries/dspace:6.x.svg)](http://microbadger.com/images/unblibraries/dspace:6.x "Get your own image badge on microbadger.com") | [![Build Status](https://travis-ci.com/unb-libraries/docker-dspace.svg?branch=6.x)](https://travis-ci.com/unb-libraries/docker-dspace) |
 
 
 ## Author / Licensing
