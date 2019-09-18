@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+CONFIG_SETTER='/scripts/set_config_property.sh'
+LOCAL_CONFIG_FILEPATH="${DSPACE_ROOT}/config/local.cfg"
+
+${CONFIG_SETTER} "assetstore.dir" "${DSPACE_ASSETSTORE_DIR}" "${LOCAL_CONFIG_FILEPATH}"
+${CONFIG_SETTER} "db.password" "${POSTGRES_DB_PASS}" "${LOCAL_CONFIG_FILEPATH}"
+${CONFIG_SETTER} "db.url" "jdbc:postgresql://${POSTGRES_DB_HOST}:${POSTGRES_DB_PORT}/${POSTGRES_DB_NAME}" "${LOCAL_CONFIG_FILEPATH}"
+${CONFIG_SETTER} "db.username" "${POSTGRES_DB_USER}" "${LOCAL_CONFIG_FILEPATH}"
+${CONFIG_SETTER} "dspace.dir" "${DSPACE_ROOT}" "${LOCAL_CONFIG_FILEPATH}"

@@ -1,0 +1,65 @@
+FROM maven:3-jdk-8-alpine as maven
+
+ENV DSPACE_VERSION 6.3
+ENV MAVEN_OPTS "-Djava.awt.headless=true"
+
+RUN apk --no-cache add git && \
+  curl -OL https://github.com/DSpace/DSpace/releases/download/dspace-${DSPACE_VERSION}/dspace-${DSPACE_VERSION}-src-release.tar.gz && \
+  tar xvzpf dspace-${DSPACE_VERSION}-src-release.tar.gz && \
+  mv dspace-${DSPACE_VERSION}-src-release dspace-src && \
+  cd dspace-src && \
+  mvn $MAVEN_OPTS package
+
+
+FROM tomcat:8-jre8 as ant
+
+ARG TARGET_DIR=dspace-installer
+
+COPY --from=maven /dspace-src/dspace/target/dspace-installer /dspace-src
+WORKDIR /dspace-src
+
+ENV ANT_VERSION 1.10.7
+ENV ANT_HOME /tmp/ant-$ANT_VERSION
+ENV PATH $ANT_HOME/bin:$PATH
+
+RUN mkdir $ANT_HOME && \
+    wget -qO- "https://archive.apache.org/dist/ant/binaries/apache-ant-$ANT_VERSION-bin.tar.gz" | tar -zx --strip-components=1 -C $ANT_HOME
+
+RUN ant init_installation update_configs update_code update_webapps update_solr_indexes
+
+
+FROM tomcat:8-jre8
+MAINTAINER UNB Libraries Systems <libsystems_at_unb.ca>
+
+LABEL ca.unb.lib.generator="xmlui"
+LABEL vcs-ref="6.x"
+LABEL vcs-url="https://github.com/unb-libraries/docker-dspace"
+
+ENV DSPACE_ADMIN_EMAIL admin@admin.com
+ENV DSPACE_ADMIN_LANGUAGE en
+ENV DSPACE_ADMIN_NAME_FIRST Admin
+ENV DSPACE_ADMIN_NAME_LAST Admin
+ENV DSPACE_ADMIN_PASSWORD temporaryonly
+ENV DSPACE_ASSETSTORE_DIR /assetstore
+ENV DSPACE_CREATE_ADMIN TRUE
+ENV DSPACE_ROOT /dspace
+ENV DSPACE_ROOT_WEBAPP xmlui
+ENV DSPACE_WEBAPPS_DEPLOY solr sword
+ENV JAVA_OPTS -Xmx2000m
+
+ENV DSPACE_BIN $DSPACE_ROOT/bin/dspace
+
+RUN apt-get update && \
+  apt-get install -y --no-install-recommends \
+    postgresql-client \
+    netcat \
+    gpg && \
+  apt-get autoremove -y && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/*
+
+COPY --from=ant /dspace $DSPACE_ROOT
+EXPOSE 8080 8009
+
+COPY ./scripts /scripts
+ENTRYPOINT ["/scripts/run.sh"]

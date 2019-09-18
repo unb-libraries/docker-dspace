@@ -1,0 +1,27 @@
+version: '3.6'
+
+services:
+  docker-dspace:
+    build:
+      context: .
+    restart: always
+    env_file:
+      - ./env/dspace.env
+    container_name: docker-dspace
+    ports:
+      - "80:8080"
+    networks:
+      - docker-dspace
+
+  docker-dspace-postgres:
+    build:
+      context: postgres/
+    restart: always
+    env_file:
+      - ./env/postgres.env
+    networks:
+      - docker-dspace
+
+networks:
+  docker-dspace:
+    name: docker-dspace
