@@ -1,4 +1,4 @@
-# unblibraries/dspace [![](https://images.microbadger.com/badges/image/unblibraries/dspace:6.x.svg)](http://microbadger.com/images/unblibraries/dspace:6.x "Get your own image badge on microbadger.com") [![Build Status](https://travis-ci.org/unb-libraries/docker-dspace.svg?branch=6.x)](https://travis-ci.org/unb-libraries/docker-dspace)
+# unblibraries/dspace [![](https://images.microbadger.com/badges/image/unblibraries/dspace:6.x.svg)](http://microbadger.com/images/unblibraries/dspace:6.x "Get your own image badge on microbadger.com") [![Build Status](https://travis-ci.com/unb-libraries/docker-dspace.svg?branch=6.x)](https://travis-ci.com/unb-libraries/docker-dspace)
 
 A lightweight extensible DSpace docker image, suitable for a development-to-production workflow.
 
