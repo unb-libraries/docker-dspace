@@ -17,6 +17,7 @@ env:
 before_install:
   - curl -sSL https://raw.githubusercontent.com/unb-libraries/CargoDock/dspace-6.x/travis/deploy.sh | sh
   - CargoDock/travis/installDockerCompose.sh
+  - mv docker-compose.yml.travis docker-compose.yml
 
 script:
   - CargoDock/travis/buildInstanceForTesting.sh
