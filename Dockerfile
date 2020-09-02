@@ -1,17 +1,16 @@
-FROM maven:3-jdk-8-alpine as maven
+FROM maven:3-jdk-11 as maven
 
-ENV DSPACE_VERSION 6.3
+ENV DSPACE_VERSION 7.0-beta3
 ENV MAVEN_OPTS "-Djava.awt.headless=true"
 
-RUN apk --no-cache add git && \
-  curl -OL https://github.com/DSpace/DSpace/releases/download/dspace-${DSPACE_VERSION}/dspace-${DSPACE_VERSION}-src-release.tar.gz && \
-  tar xvzpf dspace-${DSPACE_VERSION}-src-release.tar.gz && \
-  mv dspace-${DSPACE_VERSION}-src-release dspace-src && \
+RUN curl -LJO https://github.com/DSpace/DSpace/archive/dspace-${DSPACE_VERSION}.tar.gz && \
+  tar xvzpf DSpace-dspace-${DSPACE_VERSION}.tar.gz && \
+  mv DSpace-dspace-${DSPACE_VERSION} dspace-src && \
   cd dspace-src && \
   mvn $MAVEN_OPTS package
 
 
-FROM tomcat:8-jre8 as ant
+FROM tomcat:jre11 as ant
 
 ARG TARGET_DIR=dspace-installer
 
@@ -25,10 +24,10 @@ ENV PATH $ANT_HOME/bin:$PATH
 RUN mkdir $ANT_HOME && \
     wget -qO- "https://archive.apache.org/dist/ant/binaries/apache-ant-$ANT_VERSION-bin.tar.gz" | tar -zx --strip-components=1 -C $ANT_HOME
 
-RUN ant init_installation update_configs update_code update_webapps update_solr_indexes
+RUN ant init_installation update_configs update_code update_webapps
 
 
-FROM tomcat:8-jre8
+FROM tomcat:jre11
 MAINTAINER UNB Libraries Systems <libsystems_at_unb.ca>
 
 LABEL ca.unb.lib.generator="xmlui"
@@ -52,8 +51,7 @@ ENV DSPACE_BIN $DSPACE_ROOT/bin/dspace
 RUN apt-get update && \
   apt-get install -y --no-install-recommends \
     postgresql-client \
-    netcat \
-    gpg && \
+    netcat && \
   apt-get autoremove -y && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/*
