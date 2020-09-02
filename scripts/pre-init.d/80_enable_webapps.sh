@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+ls $DSPACE_ROOT/webapps/
+
+
 # Enable Root/UI webapp.
 rm -rf "$CATALINA_HOME/webapps/ROOT"
 ln -s "$DSPACE_ROOT/webapps/${DSPACE_ROOT_WEBAPP}" "$CATALINA_HOME/webapps/ROOT"
